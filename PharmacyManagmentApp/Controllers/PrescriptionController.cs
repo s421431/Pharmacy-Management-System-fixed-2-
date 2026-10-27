@@ -37,7 +37,7 @@ namespace PharmacyManagmentApp.Controllers
             catch (InvalidOperationException ex)
             {
                 // Catches business logic errors like "insufficient stock"
-                _logger.LogWarning(ex, "Business logic error while processing prescription for Patient ID: {PatientId}", dto.PatientId);
+                _logger.LogWarning(ex, "Business logic error while processing prescription for customer: {CustomerName}", dto.CustomerName);
                 return Conflict(new { Message = ex.Message });
             }
             catch (Exception ex)

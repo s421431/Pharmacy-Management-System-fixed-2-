@@ -11,7 +11,7 @@ namespace Infrastructure.DataSeeders
     /// <summary>
     /// Seeds sample/mock data so the app is usable out of the box without needing to
     /// manually create every manufacturer, medication form/class, active ingredient,
-    /// medication, department, doctor, and supplier by hand first.
+    /// medication, and supplier by hand first.
     ///
     /// Unlike a simple "table is empty" check, this checks each specific mock record by
     /// name and only inserts the ones that are missing. That way it always ensures this
@@ -113,33 +113,6 @@ namespace Infrastructure.DataSeeders
                         ClassId = cls(spec.Class),
                         MedicationActiveIngredients = { new MedicationActiveIngredient { IngredientId = ing(spec.Ingredient), Amount = spec.Amount } }
                     });
-                }
-            }
-            await context.SaveChangesAsync();
-
-            // --- Departments ---
-            var departmentNames = new[] { "Pharmacy", "Outpatient", "Inpatient" };
-            foreach (var name in departmentNames)
-            {
-                if (!await context.Departments.AnyAsync(d => d.Name == name))
-                {
-                    context.Departments.Add(new Department { Name = name });
-                }
-            }
-            await context.SaveChangesAsync();
-
-            // --- Doctors (identified by first+last name) ---
-            var doctorSpecs = new (string First, string Last, string Speciality, string Phone)[]
-            {
-                ("Aisha", "Khan", "General Medicine", "9123456780"),
-                ("Rohan", "Mehta", "Pediatrics", "9123456781"),
-                ("Priya", "Nair", "Dermatology", "9123456782")
-            };
-            foreach (var (first, last, speciality, phone) in doctorSpecs)
-            {
-                if (!await context.Doctors.AnyAsync(d => d.FirstName == first && d.LastName == last))
-                {
-                    context.Doctors.Add(new Doctor { FirstName = first, LastName = last, Speciality = speciality, PhoneNumber = phone });
                 }
             }
             await context.SaveChangesAsync();

@@ -13,19 +13,9 @@ public partial class Prescription
 
     public DateOnly? IssueDate { get; set; }
 
-    public int DiagnosisId { get; set; }
-
     public int UserId { get; set; }
 
-    public int PatientId { get; set; }
-
-    public int DoctorId { get; set; }
-
-    public virtual Diagnosis Diagnosis { get; set; } = null!;
-
-    public virtual Doctor Doctor { get; set; } = null!;
-
-    public virtual InsuredPerson Patient { get; set; } = null!;
+    public string CustomerName { get; set; } = null!;
 
     public virtual ICollection<PrescriptionItem> PrescriptionItems { get; set; } = new List<PrescriptionItem>();
 

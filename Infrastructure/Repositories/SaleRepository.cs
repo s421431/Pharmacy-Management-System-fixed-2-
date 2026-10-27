@@ -17,10 +17,6 @@ namespace Infrastructure.Repositories
                 .Where(s => s.Id == id)
                 .Include(s => s.User) // Pharmacist
                 .Include(s => s.Prescription)
-                    .ThenInclude(p => p.Patient) // Patient on the Prescription
-                .Include(s => s.Prescription)
-                    .ThenInclude(p => p.Doctor) // Doctor on the Prescription
-                .Include(s => s.Prescription)
                     .ThenInclude(p => p.PrescriptionItems)
                         .ThenInclude(pi => pi.Medication) // Medications on the Prescription
                 .FirstOrDefaultAsync();

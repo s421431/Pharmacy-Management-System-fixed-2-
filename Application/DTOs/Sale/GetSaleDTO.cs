@@ -10,6 +10,7 @@ namespace Application.DTOs.Sale
     {
         public int Id { get; set; }
         public int PrescriptionId { get; set; }
+        public string? CustomerName { get; set; }
         public decimal TotalAmount { get; set; }
         public decimal Discount { get; set; }
         public decimal AmountReceived { get; set; }

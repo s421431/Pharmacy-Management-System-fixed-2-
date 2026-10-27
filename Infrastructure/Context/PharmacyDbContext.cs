@@ -17,12 +17,7 @@ public partial class PharmacyDbContext : IdentityDbContext<User, Role, int>
     }
 
     public virtual DbSet<ActiveIngredient> ActiveIngredients { get; set; }
-    public virtual DbSet<Department> Departments { get; set; }
     public virtual DbSet<Diagnosis> Diagnoses { get; set; }
-    public virtual DbSet<Doctor> Doctors { get; set; }
-    public virtual DbSet<Employee> Employees { get; set; }
-    public virtual DbSet<FamilyMember> FamilyMembers { get; set; }
-    public virtual DbSet<InsuredPerson> InsuredPeople { get; set; }
     public virtual DbSet<InventoryCheck> InventoryChecks { get; set; }
     public virtual DbSet<InventoryCheckItem> InventoryCheckItems { get; set; }
     public virtual DbSet<InventoryItem> InventoryItems { get; set; }
@@ -54,16 +49,6 @@ public partial class PharmacyDbContext : IdentityDbContext<User, Role, int>
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<Department>(entity =>
-        {
-            entity.ToTable("Department");
-
-            entity.Property(e => e.Name)
-                .IsRequired()
-                .HasMaxLength(50)
-                .IsUnicode(false);
-        });
-
         modelBuilder.Entity<Diagnosis>(entity =>
         {
             entity.ToTable("Diagnosis");
@@ -72,109 +57,6 @@ public partial class PharmacyDbContext : IdentityDbContext<User, Role, int>
                 .IsRequired()
                 .HasMaxLength(255)
                 .IsUnicode(false);
-        });
-
-        modelBuilder.Entity<Doctor>(entity =>
-        {
-            entity.ToTable("Doctor");
-
-            entity.Property(e => e.FirstName)
-                .IsRequired()
-                .HasMaxLength(50)
-                .IsUnicode(false);
-
-            entity.Property(e => e.LastName)
-                .IsRequired()
-                .HasMaxLength(50)
-                .IsUnicode(false);
-
-            entity.Property(e => e.PhoneNumber)
-                .IsRequired(false)
-                .HasMaxLength(10)
-                .IsFixedLength()
-                .IsUnicode(false);
-
-            entity.Property(e => e.Speciality)
-                .IsRequired()
-                .HasMaxLength(50)
-                .IsUnicode(false);
-        });
-
-        modelBuilder.Entity<Employee>(entity =>
-        {
-            entity.HasKey(e => e.InsuredPersonId);
-
-            entity.ToTable("Employee");
-
-            entity.HasKey(e => e.InsuredPersonId);
-            entity.Property(e => e.InsuredPersonId).ValueGeneratedNever();
-            entity.Property(e => e.PhoneNumber)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .IsRequired(false);
-
-            entity.HasOne(d => d.Department).WithMany(p => p.Employees)
-                .HasForeignKey(d => d.DepartmentId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("FK_Employee_Department");
-
-            entity.HasOne(d => d.InsuredPerson).WithOne(p => p.Employee)
-                .HasForeignKey<Employee>(d => d.InsuredPersonId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("FK_Employee_InsuredPerson");
-        });
-
-        modelBuilder.Entity<FamilyMember>(entity =>
-        {
-           
-            entity.ToTable("FamilyMember");
-
-            entity.HasKey(e => e.InsuredPersonId);
-
-            entity.Property(e => e.InsuredPersonId).ValueGeneratedNever();
-            entity.Property(e => e.Relationship)
-                .IsRequired()
-                .HasMaxLength(50)
-                .IsUnicode(false);
-
-            entity.HasOne(d => d.InsuredPerson).WithOne(p => p.FamilyMember)
-                .HasForeignKey<FamilyMember>(d => d.InsuredPersonId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("FK_FamilyMember_InsuredPerson");
-
-            entity.HasOne(d => d.Employee).WithMany(p => p.FamilyMembers)
-                .HasForeignKey(d => d.EmployeeId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_FamilyMember_Employee");
-        });
-
-        modelBuilder.Entity<InsuredPerson>(entity =>
-        {
-            entity.ToTable("InsuredPerson");
-
-            entity.Property(e => e.FirstName)
-                .IsRequired()
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.LastName)
-                .IsRequired()
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.Status)
-                .IsRequired()
-                .HasMaxLength(20)
-                .IsUnicode(false);
-            entity.Property(e => e.DateOfBirth)
-                .IsRequired()
-                .HasColumnType("date");
-            entity.Property(e => e.Type)
-                .IsRequired();
-
-
         });
 
         modelBuilder.Entity<InventoryCheck>(entity =>
@@ -416,23 +298,10 @@ public partial class PharmacyDbContext : IdentityDbContext<User, Role, int>
                   .IsRequired(false)
                   .HasColumnType("date");
 
-            entity.HasOne(d => d.Diagnosis).WithMany(p => p.Prescriptions)
-                .HasForeignKey(d => d.DiagnosisId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("FK_Prescription_Diagnosis");
-
-            entity.HasOne(d => d.Doctor).WithMany(p => p.Prescriptions)
-                .HasForeignKey(d => d.DoctorId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("FK_Prescription_Doctor");
-
-            entity.HasOne(d => d.Patient).WithMany(p => p.Prescriptions)
-                .HasForeignKey(d => d.PatientId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("FK_Prescription_InsuredPerson");
+            entity.Property(e => e.CustomerName)
+                  .IsRequired()
+                  .HasMaxLength(100)
+                  .IsUnicode(false);
 
             entity.HasOne(d => d.User).WithMany(p => p.Prescriptions)
                 .HasForeignKey(d => d.UserId)

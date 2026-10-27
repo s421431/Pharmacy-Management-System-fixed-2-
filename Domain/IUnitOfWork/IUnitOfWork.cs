@@ -9,7 +9,6 @@ namespace Domain.IUnitOfWork
         IRepository<Prescription, int> Prescriptions { get; }
         IRepository<InventoryItem, int> InventoryItems { get; }
         IRepository<InventoryItemDetail, int> InventoryItemDetails { get; }
-        IRepository<InsuredPerson, int> InsuredPersons { get; }
         ISaleRepository Sales { get; }
         IOrderRepository Orders { get; }
         IRepository<Medication,int> Medications { get; }

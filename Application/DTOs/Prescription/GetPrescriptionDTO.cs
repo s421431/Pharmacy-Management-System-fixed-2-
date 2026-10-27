@@ -12,8 +12,7 @@ namespace Application.DTOs.Prescription
         public decimal TotalValue { get; set; }
         public DateTime DispenseDate { get; set; }
         public DateOnly? IssueDate { get; set; }
-        public string? PatientName { get; set; }
-        public string? DoctorName { get; set; }
+        public string? CustomerName { get; set; }
         public string? PharmacistName { get; set; }
         public List<GetPrescriptionItemDTO>? Items { get; set; }
     }

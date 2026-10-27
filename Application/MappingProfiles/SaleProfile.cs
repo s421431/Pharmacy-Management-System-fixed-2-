@@ -9,6 +9,7 @@ namespace Application.MappingProfiles
         public SaleProfile ()
         {
             CreateMap<Sale, GetSaleDTO>()
+                .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Prescription.CustomerName))
                 .ForMember(dest => dest.PharmacistName, opt => opt.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"));
             CreateMap<Sale, GetSaleDetailsDTO>()
                 .ForMember(dest => dest.PharmacistName, opt => opt.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"))

@@ -5,13 +5,8 @@ namespace Application.DTOs.Prescription
     public class CreatePrescriptionDTO
     {
         [Required]
-        public int PatientId { get; set; }
-
-        [Required]
-        public int DoctorId { get; set; }
-
-        [Required]
-        public int DiagnosisId { get; set; }
+        [StringLength(100)]
+        public string CustomerName { get; set; } = null!;
 
         public DateOnly? IssueDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
