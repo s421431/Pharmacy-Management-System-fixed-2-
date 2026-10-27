@@ -7,6 +7,11 @@ import { useToast } from '../hooks/use-toast';
 import saleService from '../services/saleService';
 import { Receipt, Search, DollarSign } from 'lucide-react';
 
+// Each row is replaced by its "details" object below, where the name lives at
+// sale.prescription.customerName. If a details call failed, the original list
+// row is used instead, where the name lives at sale.customerName.
+const getCustomerName = (sale) => sale.prescription?.customerName ?? sale.customerName ?? '';
+
 const SalesHistoryPage = () => {
     const [sales, setSales] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -44,10 +49,11 @@ const SalesHistoryPage = () => {
         fetchSalesWithDetails();
     }, [fetchSalesWithDetails]);
 
+    const term = searchTerm.toLowerCase();
     const filteredSales = sales.filter(sale =>
-        (sale.pharmacistName && sale.pharmacistName.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (sale.id && sale.id.toString().includes(searchTerm)) ||
-        (sale.prescriptionId && sale.prescriptionId.toString().includes(searchTerm))
+        getCustomerName(sale).toLowerCase().includes(term) ||
+        (sale.pharmacistName && sale.pharmacistName.toLowerCase().includes(term)) ||
+        (sale.id && sale.id.toString().includes(searchTerm))
     );
 
     const totalRevenue = sales.reduce((sum, sale) => sum + (sale.amountReceived || 0), 0);
@@ -64,14 +70,14 @@ const SalesHistoryPage = () => {
         <div className="space-y-6">
             <div>
                 <h1 className="text-2xl font-bold">Sales History</h1>
-                <p className="text-muted-foreground">Review all completed prescription sales. Click on a row to see details.</p>
+                <p className="text-muted-foreground">Review all registered sales. Click on a row to see details.</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="md:col-span-2">
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input placeholder="Search by Sale ID, Rx ID, or Pharmacist..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" />
+                        <Input placeholder="Search by customer name, Sale ID, or Pharmacist..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" />
                     </div>
                 </div>
                 <Card>
@@ -97,10 +103,9 @@ const SalesHistoryPage = () => {
                             <TableRow>
                                 <TableHead>Sale ID</TableHead>
                                 <TableHead>Date</TableHead>
+                                <TableHead>Customer</TableHead>
                                 <TableHead>Pharmacist</TableHead>
-                                <TableHead className="text-right">Total Amount</TableHead>
-                                <TableHead className="text-right">Discount</TableHead>
-                                <TableHead className="text-right">Amount Received</TableHead>
+                                <TableHead className="text-right">Total Paid</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -110,15 +115,13 @@ const SalesHistoryPage = () => {
                                     <TableCell>
                                         {sale.dispenseDate ? new Date(sale.dispenseDate).toLocaleDateString() : 'N/A'}
                                     </TableCell>
-                                    
-                                    <TableCell className="font-medium">{sale.pharmacistName}</TableCell>
-                                    <TableCell className="text-right font-mono">${(sale.totalAmount || 0).toFixed(2)}</TableCell>
-                                    <TableCell className="text-right font-mono text-green-600">-${(sale.discount || 0).toFixed(2)}</TableCell>
+                                    <TableCell className="font-medium">{getCustomerName(sale) || '—'}</TableCell>
+                                    <TableCell>{sale.pharmacistName}</TableCell>
                                     <TableCell className="text-right font-mono font-bold">${(sale.amountReceived || 0).toFixed(2)}</TableCell>
                                 </TableRow>
                             )) : (
                                 <TableRow>
-                                    <TableCell colSpan="7" className="h-24 text-center text-muted-foreground">
+                                    <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
                                         No sales found.
                                     </TableCell>
                                 </TableRow>

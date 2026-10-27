@@ -8,6 +8,7 @@ export interface Sale {
     discount: number;
     amountReceived: number;
     pharmacistName: string;
+    customerName?: string;
 }
 
 const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/Sales`;

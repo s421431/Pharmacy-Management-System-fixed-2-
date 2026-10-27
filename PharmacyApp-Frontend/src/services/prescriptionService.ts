@@ -7,9 +7,7 @@ export interface PrescriptionItemPayload {
 }
 
 export interface PrescriptionPayload {
-    PatientId: number;
-    DoctorId: number;
-    DiagnosisId: number;
+    CustomerName: string;
     UserId: number;
     PrescriptionItems: PrescriptionItemPayload[];
 }
@@ -21,13 +19,13 @@ export interface SaleResult {
     totalAmount: number;
     discount: number;
     amountReceived: number;
+    customerName?: string;
 }
-
 
 const API_URL = '/api/prescriptions';
 
 const dispensePrescription = async (prescriptionData: PrescriptionPayload): Promise<SaleResult> => {
-    // Now using the global apiClient, which handles auth automatically
+    // Uses the global apiClient, which handles auth automatically
     const response = await apiClient.post<SaleResult>(`${API_URL}/dispense`, prescriptionData);
     return response.data;
 };

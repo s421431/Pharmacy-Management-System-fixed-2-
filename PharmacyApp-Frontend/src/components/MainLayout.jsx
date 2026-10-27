@@ -3,21 +3,17 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import { Button } from './ui/button';
 import { useToast } from '../hooks/use-toast';
-import { Truck } from 'lucide-react';
-import { Receipt } from 'lucide-react';
 import {
   LayoutDashboard,
-  Users,
   Pill,
   Package,
-  FileText,
   Settings,
   LogOut,
   User,
-  Building2,
-  UserCheck,
-  ChevronLeft, 
-  ClipboardCheck
+  ChevronLeft,
+  ClipboardCheck,
+  Truck,
+  Receipt
 } from 'lucide-react';
 
 const MainLayout = () => {
@@ -48,15 +44,12 @@ const MainLayout = () => {
 
   const menuItems = [
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['Admin'] },
-    { path: '/patients', label: 'Patients', icon: Users, roles: ['Admin'] },
-    { path: '/dispense', label: 'Dispense', icon: FileText, roles: ['Pharmacist'] },
+    { path: '/register-sale', label: 'Register Sale', icon: Receipt, roles: ['Admin', 'Pharmacist'] },
     { path: '/sales', label: 'Sales History', icon: Receipt, roles: ['Admin', 'Pharmacist'] },
     { path: '/medications', label: 'Medications', icon: Pill, roles: ['Admin', 'Pharmacist'] },
     { path: '/inventory/receive-order', label: 'Receive Order', icon: Truck, roles: ['Admin', 'Pharmacist'] },
     { path: '/inventory', label: 'Inventory', icon: Package, roles: ['Admin', 'Pharmacist'] },
     { path: '/inventory/checks', label: 'Stock Counts', icon: ClipboardCheck, roles: ['Admin', 'Pharmacist'] },
-    { path: '/admin/departments', label: 'Departments', icon: Building2, roles: ['Admin'] },
-    { path: '/admin/doctors', label: 'Doctors', icon: UserCheck, roles: ['Admin'] },
     { path: '/admin/users', label: 'Users', icon: Settings, roles: ['Admin'] }
   ];
 

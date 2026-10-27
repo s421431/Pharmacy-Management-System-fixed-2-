@@ -43,7 +43,7 @@ const SaleReceiptPage = () => {
                     <h1 className="text-2xl font-bold">Sale Details</h1>
                     <div className="space-x-2">
                         <Button variant="outline" onClick={() => window.print()}><Printer className="w-4 h-4 mr-2"/>Print Receipt</Button>
-                        <Button onClick={() => navigate('/dispense')}><Plus className="w-4 h-4 mr-2"/>New Dispense</Button>
+                        <Button onClick={() => navigate('/register-sale')}><Plus className="w-4 h-4 mr-2"/>New Sale</Button>
                     </div>
                 </div>
 
@@ -59,27 +59,14 @@ const SaleReceiptPage = () => {
                         <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm mb-6">
                            <div><strong className="font-semibold text-muted-foreground">Sale ID:</strong> <span className="font-mono ml-2">#{saleDetails.id}</span></div>
                            <div className="text-right"><strong className="font-semibold text-muted-foreground">Date:</strong><span className="ml-2">{new Date(saleDetails.dispenseDate).toLocaleString()}</span></div>
-                           <div><strong className="font-semibold text-muted-foreground">Prescription ID:</strong> <span className="font-mono ml-2">#{saleDetails.prescription.id}</span></div>
+                           <div><strong className="font-semibold text-muted-foreground">Customer:</strong> <span className="ml-2 font-medium">{saleDetails.prescription?.customerName}</span></div>
                            <div className="text-right"><strong className="font-semibold text-muted-foreground">Pharmacist:</strong><span className="ml-2">{saleDetails.pharmacistName}</span></div>
-                        </div>
-
-                        <Separator className="my-6" />
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-                            <div>
-                                <h3 className="font-semibold mb-2 text-muted-foreground">PATIENT</h3>
-                                <p className="text-base font-medium">{saleDetails.prescription.patientName}</p>
-                            </div>
-                             <div>
-                                <h3 className="font-semibold mb-2 text-muted-foreground">DOCTOR</h3>
-                                <p className="text-base font-medium">Dr. {saleDetails.prescription.doctorName}</p>
-                            </div>
                         </div>
 
                         <Separator className="my-6" />
                         
                         <div>
-                            <h3 className="font-semibold mb-4 text-muted-foreground">DISPENSED ITEMS</h3>
+                            <h3 className="font-semibold mb-4 text-muted-foreground">ITEMS SOLD</h3>
                             <Table>
                                 <TableHeader>
                                     <TableRow>
@@ -90,8 +77,8 @@ const SaleReceiptPage = () => {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {saleDetails.prescription.items.map(item => (
-                                        <TableRow key={item.medicationName}>
+                                    {(saleDetails.prescription?.items ?? []).map((item, index) => (
+                                        <TableRow key={`${item.medicationName}-${index}`}>
                                             <TableCell className="font-medium">{item.medicationName}</TableCell>
                                             <TableCell className="text-center">{item.quantity}</TableCell>
                                             <TableCell className="text-right font-mono">${item.unitPrice.toFixed(2)}</TableCell>
@@ -105,17 +92,8 @@ const SaleReceiptPage = () => {
                         <Separator className="my-8" />
                         
                         <div className="space-y-2 max-w-sm ml-auto text-sm">
-                            <div className="flex justify-between items-center">
-                                <span className="font-semibold text-muted-foreground">Subtotal:</span> 
-                                <span className="font-mono font-medium">${saleDetails.totalAmount.toFixed(2)}</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                                <span className="font-semibold text-muted-foreground">Organization Coverage (Discount):</span> 
-                                <span className="font-mono font-medium text-green-600">-${saleDetails.discount.toFixed(2)}</span>
-                            </div>
-                            <Separator className="my-2"/>
                             <div className="flex justify-between items-center font-bold text-lg">
-                                <span className="text-foreground">Total Paid by Patient:</span> 
+                                <span className="text-foreground">Total Paid:</span> 
                                 <span className="font-mono">${saleDetails.amountReceived.toFixed(2)}</span>
                             </div>
                         </div>

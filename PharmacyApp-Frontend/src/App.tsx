@@ -8,13 +8,10 @@ import PrivateRoute from "./components/PrivateRoute.jsx";
 import MainLayout from "./components/MainLayout.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
-import DispensePage from "./pages/DispensePage.jsx";
-import PatientsPage from "./pages/PatientsPage.jsx";
+import RegisterSalePage from "./pages/RegisterSalePage.jsx";
 import MedicationsPage from "./pages/MedicationsPage.jsx";
 import InventoryPage from "./pages/InventoryPage.jsx";
 import NewInventoryCheckPage from "./pages/NewInventoryCheckPage.jsx"
-import DepartmentsPage from "./pages/admin/DepartmentsPage.jsx";
-import DoctorsPage from "./pages/admin/DoctorsPage.jsx";
 import UsersPage from "./pages/admin/UsersPage.jsx";
 import ReceiveOrderPage from "./pages/ReceiveOrderPage.jsx";
 import SalesHistoryPage from "./pages/SalesHistoryPage.jsx";
@@ -44,12 +41,9 @@ const App = () => (
               <Route path="inventory/new-check" element={<NewInventoryCheckPage />} />
               <Route path="inventory/receive-order" element={<ReceiveOrderPage />} />
               <Route path="dashboard" element={<DashboardPage />} />
-              <Route path="dispense" element={<DispensePage />} />
-              <Route path="patients" element={<PatientsPage />} />
+              <Route path="register-sale" element={<RegisterSalePage />} />
               <Route path="medications" element={<MedicationsPage />} />
               <Route path="inventory" element={<InventoryPage />} />
-              <Route path="admin/departments" element={<DepartmentsPage />} />
-              <Route path="admin/doctors" element={<DoctorsPage />} />
               <Route path="admin/users" element={<UsersPage />} />
               <Route path="sales" element={<SalesHistoryPage />} />
               <Route path="inventory/checks" element={<InventoryCheckListPage />} />

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Users, Pill, Package, FileText, TrendingUp, AlertTriangle } from 'lucide-react';
-import patientService from '../services/patientService';
+import { Pill, FileText, TrendingUp, AlertTriangle } from 'lucide-react';
 import medicationService from '../services/medicationService';
 import inventoryService from '../services/inventoryService';
+
 const DashboardPage = () => {
   const [stats, setStats] = useState({
-    totalPatients: 0,
     totalMedications: 0,
     lowStockItems: 0,
     totalPrescriptions: 0
@@ -16,16 +15,14 @@ const DashboardPage = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [patients, medications, inventory] = await Promise.all([
-          patientService.getPatients(),
+        const [medications, inventory] = await Promise.all([
           medicationService.getMedications(),
           inventoryService.getInventory()
- ]);
+        ]);
 
         const lowStockItems = inventory.filter(item => item.quantity < 50).length;
 
         setStats({
-          totalPatients: patients.length,
           totalMedications: medications.length,
           lowStockItems,
           totalPrescriptions: 127 // Mock number
@@ -42,13 +39,6 @@ const DashboardPage = () => {
 
   const statCards = [
     {
-      title: 'Total Patients',
-      value: stats.totalPatients,
-      description: 'Registered in system',
-      icon: Users,
-      color: 'text-primary'
-    },
-    {
       title: 'Medications',
       value: stats.totalMedications,
       description: 'Available medications',
@@ -63,9 +53,9 @@ const DashboardPage = () => {
       color: 'text-warning'
     },
     {
-      title: 'Prescriptions',
+      title: 'Sales',
       value: stats.totalPrescriptions,
-      description: 'Total dispensed',
+      description: 'Total registered',
       icon: FileText,
       color: 'text-success'
     }
@@ -87,7 +77,7 @@ const DashboardPage = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {statCards.map((stat, index) => {
           const Icon = stat.icon;
           return (
@@ -122,12 +112,8 @@ const DashboardPage = () => {
           <CardContent>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-sm">Prescription dispensed</span>
+                <span className="text-sm">Sale registered</span>
                 <span className="text-xs text-muted-foreground">2 minutes ago</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm">New patient registered</span>
-                <span className="text-xs text-muted-foreground">15 minutes ago</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm">Inventory updated</span>
